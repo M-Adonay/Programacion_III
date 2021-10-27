@@ -12,16 +12,18 @@
     <div class="container">
         <h3 class="text-primary">APP ACADEMICO</h3>
         <div class="row">
-            <div class="col col-md-6">
+            <div class="col col-md-8">
                 <div class="card text-white bg-dark mb-3">
                     <div class="card-header">REGISTRO ALUMNOS</div>
                     <div class="card-body">
-                        <div class="input-group">
-                            <input placeholder="Codigo" type="text" aria-label="Codigo" class="form-control">
-                            <input placeholder="Nombre" type="text" aria-label="Nombre" class="form-control">
-                            <input placeholder="Telefono" type="text" aria-label="Tels" class="form-control">
-                            <button type="button" class="btn btn-outline-primary">REGISTRAR</button>
-                          </div>
+                        <form id="frmAlumnos">
+                            <div class="input-group">
+                            <input id="txtCodigoAlumnos" required pattern="^([USIS|USLI|USLA]){4}[0-9]{6}" placeholder="Codigo" type="text" aria-label="Codigo" class="form-control">
+                            <input id="txtNombreAlumnos" required pattern="[A-Za-zÑñáéíóú ]{6,65}" placeholder="Nombre" type="text" aria-label="Nombre" class="form-control">
+                            <input id="txtTelefonoAlumnos" required pattern="[0-9]{4}-[0-9]{4}" placeholder="Telefono" type="text" aria-label="Tels" class="form-control">
+                            <button type="submit" class="btn btn-outline-primary">REGISTRAR</button>
+                            </div>
+                        </form>    
                     </div>
                   </div>
             </div>
@@ -32,7 +34,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script>
         $(document).ready(e=>{
-            
+          $("#frmAlumnos"),submit(e=>{
+              e.preventDefault();
+
+              let codigo = $("#txtCodigoAlumnos").val(),
+                  nombre = $("#txtNombreAlumnos").val(),
+                  telefono = $("#textTelefonoAlumnos").val(),
+                  datos = {codigo, nombre, telefono}
+                $.post("http://localhost:3000", JSON.stringify(datos), (data, status)=>{
+                    console.log(data);
+                }, "json");      
+          });  
         });
     </script>
 </body>
