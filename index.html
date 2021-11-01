@@ -12,15 +12,21 @@
     <div class="container">
         <h3 class="text-primary">APP ACADEMICO</h3>
         <div class="row">
-            <div class="col col-md-8">
+            <div class="col col-md-6">
                 <div class="card text-white bg-dark mb-3">
                     <div class="card-header">REGISTRO ALUMNOS</div>
                     <div class="card-body">
                         <form id="frmAlumnos">
-                            <div class="input-group">
+                            <div class="mb-3 row">
                             <input id="txtCodigoAlumnos" required pattern="^([USIS|USLI|USLA]){4}[0-9]{6}" placeholder="Codigo" type="text" aria-label="Codigo" class="form-control">
+                            </div>
+                            <div class="mb-3 row">
                             <input id="txtNombreAlumnos" required pattern="[A-Za-zÑñáéíóú ]{6,65}" placeholder="Nombre" type="text" aria-label="Nombre" class="form-control">
-                            <input id="txtTelefonoAlumnos" required pattern="[0-9]{4}-[0-9]{4}" placeholder="Telefono" type="text" aria-label="Tels" class="form-control">
+                            </div>
+                            <div class="mb-3 row">
+                            <input id="txtTelefonoAlumnos" required pattern="[0-9]{4}([-| ]{1}[0-9]{4}" placeholder="Telefono" type="text" aria-label="Tels" class="form-control">
+                            </div>
+                            <div class="mb-3 row">
                             <button type="submit" class="btn btn-outline-primary">REGISTRAR</button>
                             </div>
                         </form>    
