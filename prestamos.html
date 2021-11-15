@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prestamos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="collapse navbar-collapse container-fluid" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="estanteria.html">Estantería</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="recomendaciones.html">Recomendaciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="tendecias.html">Tendencias</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cuenta.html">Cuenta</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-success" href="login.html">Cerrar sesión</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid text-white bg-dark">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card text-white bg-secondary">
+                    <div class="card-header">
+                        <h5>Recomendaciones</h5>
+                    </div>
+                    <div class="card-body d-grid gap-3" id="libros">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card text-white bg-dark">
+                                    <img src="imagenes/front5.jpg" alt="" height="350" class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Card title</h5>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-white bg-dark">
+                                    <img src="imagenes/front1.jpg" alt="" height="350" class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Card title</h5>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-white bg-dark">
+                                    <img src="imagenes/front7.jpg" alt="" height="350" class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Card title</h5>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-white bg-dark">
+                                    <img src="imagenes/front7.jpg" alt="" height="350" class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Card title</h5>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <!-- JS Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+    <script>
+        function mostrarLibros() {
+            $.get('http://localhost:3000/mostra_libros', (libros) => {
+                console.log(libros);
+                for (let i = 0; i < libros.length; i++) {
+                    html += `<div class="row">`;
+                    for (let j = 0; j < 4; j++) {
+                        if (i * 3 + j < libros.length) {
+                            html += `<div class="col-md-4">
+                                <div class="card text-white bg-dark">
+                                    <img src="imagenes/front${libros[i * 3 + j].Imagen}.jpg" alt="" height="350" class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${libros[i * 3 + j].Titulo}</h5>
+                                        <p class="card-text">${libros[i * 3 + j].Sinopsis}</p>
+                                        <a href="#" class="btn btn-primary" onclick='comprar(${JSON.stringify(libros[i * 3 + j])})'>Agendar</a>
+                                    </div>
+                                </div>
+                            </div>`;
+                        }
+                    }
+                    html += `</div>`;
+                }
+                $('#libros').html(html);
+            }, 'json');
+        }
+        function comprar(libro) {
+            $.post('http://localhost:3000/comprar', JSON.stringify(libro), (res) => {
+                console.log(res);
+            });
+        }
+        $(document).ready(e => {
+        });
+    </script>
+</body>
+</html>
