@@ -88,31 +88,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     
     <script>
-        function mostrarLibros() {
-            $.get('http://localhost:3000/mostrar_libros', (libros) => {
-                libros = libros.resultado;
-                let html = '';
-                for (let i = 0; i < libros.length; i++) {
-                    html += `<div class="row">`;
-                    for (let j = 0; j < 4; j++) {
-                        if (i * 3 + j < libros.length) {
-                            html += `<div class="col-md-3">
-                                <div class="card text-white bg-dark">
-                                    <img src="imagenes/front${libros[i * 3 + j].Imagen}.jpg" alt="" height="350" class="card-img-top">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${libros[i * 3 + j].Titulo}</h5>
-                                        <p class="card-text">${libros[i * 3 + j].Sinopsis}</p>
-                                        <a href="#" class="btn btn-primary" onclick='comprar(${JSON.stringify(libros[i * 3 + j])})'>Agendar</a>
-                                    </div>
-                                </div>
-                            </div>`;
-                        }
-                    }
-                    html += `</div>`;
-                }
-                $('#libros').html(html);
-            }, 'json')
-        }
         function mostrarUsuario() {
             $.get('http://localhost:3000/mostrar_usuarios_a', (usuario) => {
                 usuario = usuario.resultado[0];
@@ -123,6 +98,33 @@
                 $('#lblTelefono').text(usuario.Telefono);
                 $('#lblCorreo').text(usuario.Correo);
             }, 'json')
+        }
+        function mostrarPrestados() {
+            $.get('http://localhost:3000/mostrar_prestamos_a', (libros) => {
+                libros = libros.resultado;
+                console.log(libros);
+                $('#libros').html('');
+                let html = '';
+                for (let i = 0; i < libros.length; i++) {
+                    html += `<div class="row">`
+                        for (let j = 0; j < 3; j++) {
+                        if (i * 3 + j < libros.length) {
+                            html += `<div class="col-md-3">
+                            <div class="card text-white bg-dark">
+                                <img src="${libros[i * 3 + j].Imagen}" alt="" height="450" width="300" class="card-img-top">
+                                <div class="card-body overflow-auto" style="min-height: 200px; max-height:200px;">
+                                    <h5 class="card-title">${libros[i * 3 + j].Titulo}</h5>
+                                    <p class="card-text">${libros[i * 3 + j].Autor}</p>
+                                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" onclick='agregarLibro(${JSON.stringify(libros)})'>Agregar A</button>
+                                </div>
+                                </div>
+                            </div>`;
+                        }
+                    }
+                    html += `</div>`;
+                }
+                $('#libros').html(html);
+            }, 'json');
         }
         function salir() {
             $.post('http://localhost:3000/salir', JSON.stringify({}), (respuesta) => {
@@ -137,7 +139,7 @@
             });
         }
         $(document).ready(e => {
-            mostrarLibros();
+            mostrarPrestados();
             mostrarUsuario();
 
             $('#btnSalir').click(e => {

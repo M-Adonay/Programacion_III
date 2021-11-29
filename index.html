@@ -69,7 +69,6 @@
                     <div class="card-header">
                         <h5></h5>
                     </div>
-                    <!-- Mostra una lista de tres libros en pequeños cuadrados -->
                     <div class="card-body">
                         <div class="list-group">
                             <a href="#" class="list-group-item list-group-item-action text-white bg-dark btn btn-secondary">
@@ -82,7 +81,7 @@
                             <a href="#" class="list-group-item list-group-item-action text-white bg-dark btn btn-secondary">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">Libro</h5>
-                                    <img src="" alt="" width="50" height="50" class="img-fluid">
+                                    <img src="" alt="" width="50" height="100" class="img-fluid">
                                     <small>Autor</small>
                                 </div>
                             </a>
@@ -103,29 +102,73 @@
                         <h5>Libros</h5>
                     </div>
                     <div class="card-body d-grid gap-3" id="libros">
-                        <!-- ... -->
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Esto servira para mostrar el libro en la misma ventana -->
-        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">Toggle top offcanvas</button>
-        <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+        <div class="offcanvas offcanvas-bottom h-75 card text-white bg-secondary" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
             <div class="offcanvas-header">
-              <h5 id="offcanvasTopLabel">Offcanvas top</h5>
-              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <h5 id="offcanvasBottomLabel">Offcanvas top</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-              ...
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="/imagenes/portadas/front15.jpg" alt="" width="250" height="350">
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Autor</strong>
+                        <p id="canvasAutor"></p>
+                        <p id="canvasSinopsis"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Cantidad</strong>
+                                <p id="canvasCantidad"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-success btn-block" id="btnPrestar">Prestar</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-success btn-block" id="btnEstantería">Estanteria</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="sltRating">Calificar</label>
+                                <select class="form-control" id="sltRating">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Alerta -->
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alerta">
+                    <strong>Error!</strong> <span id="alertaTexto"></span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-    <!-- JS Bootstrap -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+</script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" 
+    integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <script>
         function mostrarLibros() {
             $.get('http://localhost:3000/mostrar_libros', (libros) => {
@@ -137,11 +180,11 @@
                         if (i * 3 + j < libros.length) {
                             html += `<div class="col-md-4">
                                 <div class="card text-white bg-dark">
-                                    <img src="imagenes/front${libros[i * 3 + j].Imagen}.jpg" alt="" height="350" class="card-img-top">
-                                    <div class="card-body">
+                                    <img src="${libros[i * 3 + j].Imagen}" alt="" height="450" width="300" class="card-img-top">
+                                    <div class="card-body overflow-auto" style="min-height: 200px; max-height:200px;">
                                         <h5 class="card-title">${libros[i * 3 + j].Titulo}</h5>
                                         <p class="card-text">${libros[i * 3 + j].Sinopsis}</p>
-                                        <a href="#" class="btn btn-primary" onclick='comprar(${JSON.stringify(libros[i * 3 + j])})'>Agendar</a>
+                                        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" onclick='agregarLibro(${JSON.stringify(libros[i * 3 + j])})'>Agregar A</button>
                                     </div>
                                 </div>
                             </div>`;
@@ -163,6 +206,38 @@
             $.post('http://localhost:3000/comprar', JSON.stringify(libro), (res) => {
                 console.log(res);
             });
+        }
+        function agregarLibro(libro) {
+            console.log(libro);
+            $('#offcanvasBottom img').attr('src', libro.Imagen);
+            $('#offcanvasBottomLabel').text(libro.Titulo);
+            $('#canvasSinopsis').text(libro.Sinopsis);
+            $('#btnPrestar').attr('onclick', `prestarLibro(${JSON.stringify(libro)})`);
+            $('#btnEstantería').attr('onclick', `estanteriaLibro(${JSON.stringify(libro)})`);
+        }
+        function prestarLibro(libro) {
+            let accion = 'insertar',
+                idLibro = libro.idLibro,
+                datos = {
+                    accion,
+                    idLibro
+                };
+                console.log(datos);
+            $.post('http://localhost:3000/prestar', JSON.stringify(datos), (res) => {
+                console.log(res);
+            }, 'json');
+        }
+        function estanteriaLibro(libro) {
+            let accion = 'insertar',
+                idLibro = libro.idLibro,
+                datos = {
+                    accion,
+                    idLibro
+                };
+                console.log(datos);
+            $.post('http://localhost:3000/agregar_estanteria', JSON.stringify(datos), (res) => {
+                console.log(res);
+            }, 'json');
         }
         $(document).ready(e => {
             mostrarLibros();

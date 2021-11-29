@@ -91,10 +91,10 @@
             });
         }
         function mostrarRecomendaciones() {
-            $.get('http://localhost:3000/mostrar_recomendaciones', (libros) => {
-                libros = libros.resultado;
-                console.log(libros);
-                let html = '';
+            // $.get('http://localhost:3000/mostrar_recomendaciones', (libros) => {
+            //     libros = libros.resultado;
+            //     console.log(libros);
+            //     let html = '';
                 // for (let i = 0; i < libros.length; i++) {
                 //     html += `<div class="row">`;
                 //     for (let j = 0; j < 4; j++) {
@@ -113,8 +113,8 @@
                 //     }
                 //     html += `</div>`;
                 // }
-                $('#libros').html(html);
-            }, 'json')
+            //     $('#libros').html(html);
+            // }, 'json')
         }
         $(document).ready(e => {
             mostrarLibros();
