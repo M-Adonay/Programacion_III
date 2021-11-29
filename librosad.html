@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libros y Generos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index">
+            <img src="img/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            Biblioteca
+        </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="librosad">Libros y Generos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="usuariosad">Usuarios y Permisos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="prestamosad">Prestamos</a>
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid text-white bg-dark">
+        <div class="container">
+            <div class="row p-6">
+                <div class="col-md-5">
+                    <div class="row mr-2">
+                        <div class="card bg-secondary">
+                            <div class="card-header">
+                                <h1>Libros</h1>
+                            </div>
+                            <form enctype="multipart/form-data" class="d-grid gap-3 ml-4" id="frmLibros" data-accion="insertar" data-id="0">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txtTitulo">Titulo</label>
+                                            <input type="text" class="form-control" id="txtTitulo" name="txtTitulo" placeholder="Titulo">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txtAutor">Autor</label>
+                                            <input type="text" class="form-control" id="txtAutor" name="txtAutor" placeholder="Autor">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txtEdicion">Fecha de Edicion</label>
+                                            <input type="date" class="form-control" id="txtEdicion" name="txtEdicion" placeholder="Edicion">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="sltGenero">Genero</label>
+                                            <select class="form-control" id="sltGenero" name="sltGenero">
+                                                <option>Seleccione un genero</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="txtSinopsis">Sinopsis</label>
+                                            <textarea class="form-control" id="txtSinopsis" name="txtSinopsis" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txtImagen">Imagen</label>
+                                            <input type="file" class="form-control-file" id="txtImagen" name="txtImagen">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txtCantidad">Cantidad</label>
+                                            <input type="number" class="form-control" id="txtCantidad" name="txtCantidad" placeholder="Cantidad">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary mb-2" id="btnInsertar">Agregar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+    
+                </div>
+                <div class="col-md-5 mr-4">
+                    <div class="row">
+                        <div class="card bg-secondary">
+                            <div class="card-header">
+                                <h1>Generos</h1>
+                            </div>
+                            <form enctype="multipart/form-data" class="p-2">
+                                <div class="form-group">
+                                    <label for="txtGenero">Genero</label>
+                                    <input type="text" class="form-control" id="txtGenero" name="txtGenero" placeholder="Genero">
+                                </div>
+                                <div class="form-group">
+                                    <label for="txtDescripcion">Descripcion</label>
+                                    <textarea class="form-control" id="txtDescripcion" name="txtDescripcion" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="btnInsertarGenero">Agregar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-striped table-hover table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Titulo</th>
+                                <th scope="col">Autor</th>
+                                <th scope="col">Edicion</th>
+                                <th scope="col">Sinopsis</th>
+                                <th scope="col">Genero</th>
+                                <th scope="col">Imagen</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- ... -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <!-- JS Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+    <script>
+        function mostrarLibros() {
+            $.get('http://localhost:3000/mostrar_libros', (libros) => {
+                libros = libros.resultado;
+                console.log(libros[0].idGeneros);
+                let html = '';
+                libros.forEach(libro => {
+                    let etiquetas = '',
+                        generos = libro.Generos.split(',');
+                    generos.forEach(genero => {
+                        etiquetas += `<div class="alert alert-dark p-1" style="width: fit-content;">
+                                    <strong>${genero}</strong>
+                                </div>`;
+                    });
+                    html += `
+                        <tr>
+                            <td>${libro.idLibro}</td>
+                            <td>${libro.Titulo}</td>
+                            <td>${libro.Autor}</td>
+                            <td>${libro.Edicion}</td>
+                            <td>${libro.Sinopsis}</td>
+                            <td>${etiquetas}</td>
+                            <td><img src="${libro.Imagen}" width="100" height="100"></td>
+                            <td>${libro.Cantidad}</td>
+                            <td>
+                                <button class="btn btn-danger" onclick="eliminarLibro(${libro.idLibro})">Eliminar</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                $('tbody').html(html);
+            }, 'json');
+        }
+        $(document).ready(e => {
+            mostrarLibros();
+
+            $('#frmLibros').submit(e => {
+                e.preventDefault();
+                let accion = $('#frmLibros').data('accion'),
+                    id = $('#frmLibros').data('id'),
+                    titulo = $('#txtTitulo').val(),
+                    autor = $('#txtAutor').val(),
+                    edicion = $('#txtEdicion').val(),
+                    sinopsis = $('#txtSinopsis').val(),
+                    genero = $('#txtGenero').val(),
+                    cantidad = $('#txtCantidad').val(),
+                    imagen = $('#txtImagen').val(),
+                    datos = {
+                        titulo: titulo,
+                        autor: autor,
+                        edicion: edicion,
+                        sinopsis: sinopsis,
+                        genero: genero,
+                        cantidad: cantidad,
+                        imagen: imagen
+                    };
+                $.post('http://localhost:3000/administrar_libros', JSON.stringify(datos), (libro) => {
+                    if (libro.resultado) {
+                        mostrarLibros();
+                    }
+                }, 'json');
+            });
+        });
+    </script>
+</body>
+</html>
