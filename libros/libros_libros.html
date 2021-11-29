@@ -1,0 +1,204 @@
+<div class="card bg-secondary" id="cardLibros">
+    <div class="card-header">
+        <h1>Libros</h1>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" data-bs-target="#cardLibros" aria-label="Close"></button>
+    </div>
+    <form enctype="multipart/form-data" class="d-grid gap-3 ml-4 p-2" id="frmLibros" data-accion="insertar" data-id="0">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="txtTituloLibro">Titulo</label>
+                    <input type="text" class="form-control" id="txtTituloLibro" name="txtTituloLibro" placeholder="Titulo">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="txtAutorLibro">Autor</label>
+                    <input type="text" class="form-control" id="txtAutorLibro" name="txtAutorLibro" placeholder="Autor">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="txtEdicionLibro">Fecha de Edicion</label>
+                    <input type="date" class="form-control" id="txtEdicionLibro" name="txtEdicionLibro" placeholder="Edicion">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="sltGeneroLibro">Genero</label>
+                    <select class="form-control" id="sltGeneroLibro" name="sltGeneroLibro[]" multiple>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="txtSinopsisLibro">Sinopsis</label>
+                    <textarea class="form-control" id="txtSinopsisLibro" name="txtSinopsisLibro" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="imgLibro">Imagen</label>
+                    <input type="file" class="form-control-file" id="imgLibro" name="imgLibro" required>
+                    <canvas id="canvasLibro" hidden></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="txtCantidadLibro">Cantidad</label>
+                    <input type="number" class="form-control" id="txtCantidadLibro" name="txtCantidadLibro" placeholder="Cantidad">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary mt-2" id="btnInsertarLibro">Agregar</button>
+                <button type="reset" class="btn btn-primary mt-2" id="btnLimpiarLibro">Limpiar</button>
+                <button type="button" class="btn btn-success mt-2" id="btnBuscarLibros">Buscar</button>
+            </div>
+        </div>
+    </form>
+    
+    <div class="alert alert-success alert-dismissible fade show d-none m-2" id="alertaLibros" role="alert">
+    </div>
+</div>
+<script>
+    function mostrarGeneros() {
+        $.get('http://localhost:3000/mostrar_generos', (generos) => {
+            console.log(generos);
+            $('#sltGeneroLibro').html('');
+            generos.resultado.forEach(genero => {
+                $('#sltGeneroLibro').append(`<option value="${genero.idGenero}">${genero.Nombre}</option>`);
+            });
+        }, 'json');
+    }
+    function actualizarLibro(libro) {
+        $('#frmLibros').attr('data-accion', 'actualizar');
+        $('#frmLibros').attr('data-id', libro.idLibro);
+        $('#txtTituloLibro').val(libro.Titulo);
+        $('#txtAutorLibro').val(libro.Autor);
+        $('#txtEdicionLibro').val(libro.Edicion);
+        $('#txtSinopsisLibro').val(libro.Sinopsis);
+        if (libro.idGeneros != null) {
+            let generos = libro.idGeneros.split(',');
+            $('#sltGeneroLibro').val(generos);
+        } else {
+            $('#sltGeneroLibro').val([]);
+        }
+        $('#imgLibro').val('');
+        $('#txtCantidadLibro').val(libro.Cantidad);
+    }
+    function limpiarLibros() {
+        $('#frmLibros').attr('data-accion', 'insertar');
+        $('#frmLibros').attr('data-id', 0);
+        $('#txtTituloLibro').val('');
+        $('#txtAutorLibro').val('');
+        $('#txtEdicionLibro').val('');
+        $('#txtSinopsisLibro').val('');
+        $('#sltGeneroLibro').val('');
+        $('#imgLibro').val('');
+        $('#txtCantidadLibro').val('');
+    }
+    $(document).ready(e => {
+        mostrarGeneros();
+
+        $('#imgLibro').change(e => {
+            let img = new Image();
+            let file = e.target.files[0];
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+                img.onload = function() {
+                    let canvas = document.getElementById('canvasLibro');
+                    let ctx = canvas.getContext('2d');
+                    canvas.width = 300;
+                    canvas.height = 300;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                }
+            }
+            reader.readAsDataURL(file);
+        });
+        $('#frmLibros').submit(e => {
+            e.preventDefault();
+            let canvas = document.getElementById('canvasLibro');
+            let ctx = canvas.getContext('2d');
+            console.log(canvas, canvas.width, canvas.height);
+            let imagen = [];
+            for(i=0; i<canvas.width; i++){
+                for(j=0; j< canvas.height; j++){
+                    let imgdata = ctx.getImageData(j,i,1,1).data,
+                        r = imgdata[0],
+                        g = imgdata[1],
+                        b = imgdata[2];
+                    imagen.push([r,g,b]);
+                }
+            }
+            let accion = $('#frmLibros').data('accion'),
+                id = $('#frmLibros').data('id'),
+                titulo = $('#txtTituloLibro').val(),
+                autor = $('#txtAutorLibro').val(),
+                edicion = $('#txtEdicionLibro').val(),
+                sinopsis = $('#txtSinopsisLibro').val(),
+                genero = $('#sltGeneroLibro').val(),
+                cantidad = $('#txtCantidadLibro').val(),
+                datos = {
+                    accion: accion,
+                    id: id,
+                    titulo: titulo,
+                    autor: autor,
+                    edicion: edicion,
+                    sinopsis: sinopsis,
+                    generos: genero,
+                    cantidad: cantidad,
+                    imagen: imagen
+                };
+            console.log(datos);
+            $.post('http://localhost:3000/administrar_libro', JSON.stringify(datos), (libro) => {
+                console.log(libro);
+                
+                if (libro.respuesta == true) {
+                    html = `<strong>Usuario agregado correctamente</strong>
+                        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                            X
+                        </button>`;
+                    $('#alertaLibros').html(html);
+                    $('#alertaLibros').removeClass('d-none');
+                    $('#alertaLibros').removeClass('alert-danger')
+                        .addClass('alert-success');
+                    setTimeout(() => {
+                        $('#alertaLibros').addClass('d-none');
+                    }, 5000);
+                    limpiarLibros();
+                    mostrarLibros();
+                } else {
+                    html = `<strong>Error al agregar el usuario</strong>
+                        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                            X
+                        </button>`;
+                    $('#alertaLibros').html(html);
+                    $('#alertaLibros').removeClass('d-none');
+                    $('#alertaLibros').removeClass('alert-success')
+                        .addClass('alert-danger');
+                    setTimeout(() => {
+                        $('#alertaLibros').addClass('d-none');
+                    }, 5000);
+                }
+            }, 'json');
+        })
+        .on('reset', e => {
+                limpiarLibros();
+        });
+
+        $('#btnBuscarLibros').click(e => {
+            e.preventDefault();
+            abrir_ventana("libros", "buscar");
+        });
+
+    });
+</script>

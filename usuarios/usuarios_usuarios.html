@@ -1,0 +1,186 @@
+<div class="card bg-secondary" id="cardUsuarios">
+    <div class="card-header">
+        <h1>Usuarios</h1>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" data-bs-target="#cardUsuarios" aria-label="Close"></button>
+    </div>
+    <form enctype="multipart/form-data" class="d-grid gap-3 p-2" id="frmUsuarios" data-accion="insertar" data-id="0">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="txtDUI">DUI</label>
+                    <input type="text" class="form-control" id="txtDUI" name="txtDUI" placeholder="DUI"
+                        required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="txtNombre">Nombre</label>
+                    <input type="text" class="form-control" id="txtNombre" name="txtNombre" placeholder="Nombre"
+                        required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="txtNick">Nick</label>
+                    <input type="text" class="form-control" id="txtNick" name="txtNick" placeholder="Nombre de Usuario"
+                        required>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="txtTelefono">Telefono</label>
+                    <input type="text" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Telefono"
+                        required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="txtCorreo">Correo</label>
+                    <input type="email" class="form-control" id="txtCorreo" name="txtCorreo" placeholder="Correo"
+                        required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="txtDireccion">Direccion</label>
+                    <input type="text" class="form-control" id="txtDireccion" name="txtDireccion" placeholder="Dirección"
+                        required>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="txtFechaNacimiento">Fecha de Nacimiento</label>
+                    <input type="date" class="form-control" id="txtFechaNacimiento" name="txtFechaNacimiento">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="txtContra">Contraseña</label>
+                    <input type="text" class="form-control" id="txtContra" name="txtContra" placeholder="Contraseña"
+                        required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="slcPermisos">Permisos</label>
+                    <select id="slcPermisos" name="slcPermisos" class="form-control">
+                        <option value="1">Administrador</option>
+                        <option value="2">Usuario</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary mt-2" id="btnInsertar">Agregar</button>
+                <button type="reset" class="btn btn-primary mt-2" id="btnLimpiar">Limpiar</button>
+                <button type="button" class="btn btn-success mt-2" id="btnBuscarUsuarios">Buscar</button>
+            </div>
+        </div>
+    </form>
+    <div class="alert alert-success alert-dismissible fade show d-none m-2" id="alertaUsuarios" role="alert">
+        <strong>Usuario agregado correctamente</strong>
+        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+            X
+        </button>
+    </div>
+</div>
+<script>
+    function actualizarUsuario(usuario) {
+        $('#txtDUI').val(usuario.Dui);
+        $('#txtNombre').val(usuario.Nombre);
+        $('#txtNick').val(usuario.Nickname);
+        $('#txtTelefono').val(usuario.Telefono);
+        $('#txtCorreo').val(usuario.Correo);
+        $('#txtDireccion').val(usuario.Direccion);
+        $('#txtFechaNacimiento').val(usuario.FechaNacimiento);
+        $('#txtContra').val(usuario.Contraseña);
+        $('#slcPermisos').val(usuario.idTipo);
+        $('#frmUsuarios').attr('data-accion', 'actualizar');
+        $('#frmUsuarios').attr('data-id', usuario.idUsuario);
+    }
+    function limpiarUsuaios(){
+        $('#txtDUI').val('');
+        $('#txtNombre').val('');
+        $('#txtNick').val('');
+        $('#txtTelefono').val('');
+        $('#txtCorreo').val('');
+        $('#txtDireccion').val('');
+        $('#txtFechaNacimiento').val('');
+        $('#txtContra').val('');
+        $('#slcPermisos').val('');
+        $('#frmUsuarios').attr('data-accion', 'insertar');
+        $('#frmUsuarios').attr('data-id', 0);
+    }
+    $(document).ready(e => {
+        $('#slcPermisos').val('');
+        $('#frmUsuarios').submit(e => {
+                e.preventDefault();
+                let accion = $('#frmUsuarios').data('accion'),
+                    id = $('#frmUsuarios').data('id'),
+                    dui = $('#txtDUI').val(),
+                    nombre = $('#txtNombre').val(),
+                    nick = $('#txtNick').val(),
+                    telefono = $('#txtTelefono').val(),
+                    correo = $('#txtCorreo').val(),
+                    direccion = $('#txtDireccion').val(),
+                    fechaNacimiento = $('#txtFechaNacimiento').val(),
+                    contra = $('#txtContra').val(),
+                    permiso = $('#slcPermisos').val();
+                    datos = {
+                        accion: accion,
+                        id: id,
+                        dui: dui,
+                        nombre: nombre,
+                        nickname: nick,
+                        telefono: telefono,
+                        correo: correo,
+                        direccion: direccion,
+                        fechaNacimiento: fechaNacimiento,
+                        contraseña: contra,
+                        idTipo: permiso
+                    };
+                    console.log(datos);
+                $.post('http://localhost:3000/administrar_usuarios', JSON.stringify(datos), (datos) => {
+                    console.log(datos);
+                    if (datos.respuesta == true) {
+                        html = `<strong>Usuario agregado correctamente</strong>
+                            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                                X
+                            </button>`;
+                        $('#alertaUsuarios').html(html);
+                        $('#alertaUsuarios').removeClass('d-none');
+                        $('#alertaUsuarios').removeClass('alert-danger')
+                            .addClass('alert-success');
+                        setTimeout(() => {
+                            $('#alertaUsuarios').addClass('d-none');
+                        }, 5000);
+                        limpiarUsuaios();
+                        mostrarUsuarios();
+                    } else {
+                        html = `<strong>Error al agregar el usuario</strong>
+                            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                                X
+                            </button>`;
+                        $('#alertaUsuarios').html(html);
+                        $('#alertaUsuarios').removeClass('d-none');
+                        $('#alertaUsuarios').removeClass('alert-success')
+                            .addClass('alert-danger');
+                        setTimeout(() => {
+                            $('#alertaUsuarios').addClass('d-none');
+                        }, 5000);
+                    }
+                }, 'json');
+            })
+            .on('reset', e => {
+                limpiarUsuaios();
+            });
+
+        $('#btnBuscarUsuarios').click(e => {
+            e.preventDefault();
+            abrir_ventana("usuarios", "buscar");
+        });
+    });
+</script>

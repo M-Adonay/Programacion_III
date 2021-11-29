@@ -1,0 +1,102 @@
+<div class="card bg-secondary" id="cardGeneros">
+    <div class="card-header">
+        <h1>Generos</h1>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" data-bs-target="#cardGeneros" aria-label="Close"></button>
+    </div>
+    <form enctype="multipart/form-data" class="d-grid gap-3 ml-4 p-2" id="frmGenero" data-accion="insertar" data-id="0">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="txtNombreGenero">Nombre</label>
+                    <input type="text" class="form-control" id="txtNombreGenero" name="txtNombreGenero" placeholder="Titulo"
+                        required>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="txtDescripcionGenero">Descripción</label>
+                    <textarea class="form-control" id="txtDescripcionGenero" name="txtDescripcionGenero" rows="3" placeholder="Descripción" required></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary mt-2" id="btnInsertarGenero">Agregar</button>
+                <button type="reset" class="btn btn-primary mt-2" id="btnLimpiarGenero">Limpiar</button>
+                <button type="button" class="btn btn-success mt-2" id="btnBuscarGeneros">Buscar</button>
+            </div>
+        </div>
+    </form>
+    
+    <div class="alert alert-success alert-dismissible fade show d-none m-2" id="alertaGeneros" role="alert">
+    </div>
+</div>
+<script>
+    function actualizarGenero(genero) {
+        $('#frmGenero').attr('data-accion', 'actualizar');
+        $('#frmGenero').attr('data-id', genero.idGenero);
+        $('#txtNombreGenero').val(genero.Nombre);
+        $('#txtDescripcionGenero').val(genero.Descripcion);
+    }
+    function limpiarGenero() {
+        $('#frmGenero').attr('data-accion', 'insertar');
+        $('#frmGenero').attr('data-id', 0);
+        $('#txtNombreGenero').val('');
+        $('#txtDescripcionGenero').val('');
+    }
+    $(document).ready(function() {
+        $('#frmGenero').submit(e => {
+            e.preventDefault();
+            let accion = $('#frmGenero').attr('data-accion'),
+            id = $('#frmGenero').attr('data-id'),
+            nombre = $('#txtNombreGenero').val(),
+            descripcion = $('#txtDescripcionGenero').val(),
+            datos = {
+                accion: accion,
+                id: id,
+                nombre: nombre,
+                descripcion: descripcion
+            };
+            $.post('http://localhost:3000/administrar_generos', JSON.stringify(datos), (genero) => {
+                console.log(genero);
+                
+                if (genero.respuesta == true) {
+                    html = `<strong>Genero agregado correctamente</strong>
+                        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                            X
+                        </button>`;
+                    $('#alertaGeneros').html(html);
+                    $('#alertaGeneros').removeClass('d-none');
+                    $('#alertaGeneros').removeClass('alert-danger')
+                        .addClass('alert-success');
+                    setTimeout(() => {
+                        $('#alertaGeneros').addClass('d-none');
+                    }, 5000);
+                    limpiarGenero();
+                    mostrarGenero();
+                    mostrarGeneros();
+                } else {
+                    html = `<strong>Error al agregar el genero</strong>
+                        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                            X
+                        </button>`;
+                    $('#alertaGeneros').html(html);
+                    $('#alertaGeneros').removeClass('d-none');
+                    $('#alertaGeneros').removeClass('alert-success')
+                        .addClass('alert-danger');
+                    setTimeout(() => {
+                        $('#alertaGeneros').addClass('d-none');
+                    }, 5000);
+                }
+            }, 'json');
+        })
+        .on('reset', e => {
+            limpiarGenero();
+        });
+
+        $('#btnBuscarGeneros').click(e => {
+            e.preventDefault();
+            abrir_ventana("generos", "buscar");
+        });
+    });
+</script>

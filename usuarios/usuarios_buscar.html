@@ -1,0 +1,100 @@
+<div class="card bg-secondary" id="cardBuscarUsuarios">
+    <div class="card-header">
+        Consulta de Usuarios
+    
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" data-bs-target="#cardBuscarUsuarios" aria-label="Close"></button>
+    </div>
+    <div class="card-body overflow-auto" style="max-height: 75vh;">
+        <table class="table table-striped table-hover table-dark" id="tblUsuarios">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">DUI</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Nickname</th>
+                    <th scope="col">Telefono</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Direccion</th>
+                    <th scope="col">Fecha de Nacimiento</th>
+                    <th scope="col">Contraseña</th>
+                    <th scope="col">Permisos</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function mostrarUsuarios() {
+            $.get('http://localhost:3000/mostrar_usuarios', (usuarios) => {
+                usuarios = usuarios.resultado;
+                $('#tblUsuarios > tbody').empty();
+                let html = '';
+                usuarios.forEach(usuario => {
+                    html += `
+                        <tr onclick='actualizarUsuario(${JSON.stringify(usuario)})'>
+                            <td>${usuario.idUsuario}</td>
+                            <td>${usuario.Dui}</td>
+                            <td>${usuario.Nombre}</td>
+                            <td>${usuario.Nickname}</td>
+                            <td>${usuario.Telefono}</td>
+                            <td>${usuario.Correo}</td>
+                            <td>${usuario.Direccion}</td>
+                            <td>${usuario.FechaNacimiento}</td>
+                            <td>${usuario.Contraseña}</td>
+                            <td>
+                                <div class="alert alert-dark p-1" style="width: fit-content;" onclick='actualizarGenero(${JSON.stringify(usuario.idTipo)}, ${JSON.stringify(usuario.Tipo)})'>
+                                    <strong>${usuario.Tipo}</strong>
+                                </div>
+                            <td class="table-secondary">
+                                <button class="btn btn-danger" onclick='eliminarUsuario(${JSON.stringify(usuario)})'>Eliminar</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                $('#tblUsuarios > tbody').html(html);
+            }, 'json');
+        }
+        function eliminarUsuario(usuario) {
+            if( confirm(`Esta seguro de eliminar el usuario ${usuario.Nombre}?`) ){
+                let accion = "eliminar",
+                    id = usuario.idUsuario,
+                    datos = {accion,id};
+                $.post("http://localhost:3000/administrar_usuarios",JSON.stringify(datos),(resp, status)=>{
+                    console.log(resp);
+                    if (resp.respuesta == true) {
+                        console.log('Eliminado');
+                        html = `<strong>Usuario eliminado correctamente</strong>
+                            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                                X
+                            </button>`;
+                        $('#alertaUsuarios').html(html);
+                        $('#alertaUsuarios').removeClass('d-none');
+                        $('#alertaUsuarios').removeClass('alert-danger')
+                            .addClass('alert-success');
+                        setTimeout(() => {
+                            $('#alertaUsuarios').addClass('d-none');
+                        }, 5000);
+                        mostrarUsuarios();
+                    } else {
+                        html = `<strong>Error al eliminar al usuario</strong>
+                            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                                X
+                            </button>`;
+                        $('#alertaUsuarios').html(html);
+                        $('#alertaUsuarios').removeClass('d-none');
+                        $('#alertaUsuarios').removeClass('alert-success')
+                            .addClass('alert-danger');
+                        setTimeout(() => {
+                            $('#alertaUsuarios').addClass('d-none');
+                        }, 5000);
+                    }
+                }, "json");
+            }
+            
+        }
+        $(document).ready(e => {
+            mostrarUsuarios();
+        });
+</script>
