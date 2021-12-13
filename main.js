@@ -25,5 +25,6 @@ function abrir_ventana(modulo, formulario){
         .draggable()
         .click(function(e){
             $(this).css("z-index", ++zindex);
-        });
+        })
+        .resizable();
 }

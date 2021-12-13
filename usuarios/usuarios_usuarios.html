@@ -118,8 +118,8 @@
         $('#slcPermisos').val('');
         $('#frmUsuarios').submit(e => {
                 e.preventDefault();
-                let accion = $('#frmUsuarios').data('accion'),
-                    id = $('#frmUsuarios').data('id'),
+                let accion = $('#frmUsuarios').attr('data-accion'),
+                    id = $('#frmUsuarios').attr('data-id'),
                     dui = $('#txtDUI').val(),
                     nombre = $('#txtNombre').val(),
                     nick = $('#txtNick').val(),

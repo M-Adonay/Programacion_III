@@ -21,11 +21,11 @@
                             <form id="frmEntrar">
                                 <div class="form-group">
                                     <label for="txtUsuarioEntrar">Usuario</label>
-                                    <input type="text" class="form-control" id="txtUsuarioEntrar" name="txtUsuarioEntrar" placeholder="Usuario" required>
+                                    <input type="text" class="form-control" id="txtUsuarioEntrar" name="txtUsuarioEntrar" placeholder="Carlos José Aguilar Carranza" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="txtContraEntrar">Contraseña</label>
-                                    <input type="password" name="txtContraEntrar" id="txtContraEntrar" class="form-control" placeholder="Contraseña" required>
+                                    <input type="password" name="txtContraEntrar" id="txtContraEntrar" class="form-control" placeholder="0Aañ%@/*-$jK" required>
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary btn-block mt-2" id="btnEntrar">Iniciar Sesión</button>
@@ -47,27 +47,27 @@
                             <form id="frmRegistrar">
                                 <div class="form-group">
                                     <label for="txtDui">DUI</label>
-                                    <input type="text" name="txtDui" id="txtDui" class="form-control" placeholder="DUI" required>
+                                    <input type="text" name="txtDui" id="txtDui" class="form-control" placeholder="01542303-2" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="txtNombre">Nombre</label>
-                                    <input type="text" name="txtNombre" id="txtNombre" class="form-control" placeholder="Nombre" required>
+                                    <input type="text" name="txtNombre" id="txtNombre" class="form-control" placeholder="Carlos José Aguilar Carranza" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="txtUsuario">Usuario</label>
-                                    <input type="text" name="txtUsuario" id="txtUsuario" class="form-control" placeholder="Usuario" required>
+                                    <input type="text" name="txtUsuario" id="txtUsuario" class="form-control" placeholder="CarlosCarranza" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="txtTelefono">Teléfono</label>
-                                    <input type="text" name="txtTelefono" id="txtTelefono" class="form-control" placeholder="Telefono" required>
+                                    <input type="text" name="txtTelefono" id="txtTelefono" class="form-control" placeholder="7424-1234" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="txtCorreo">Correo Electrónico</label>
-                                    <input type="email" name="txtCorreo" id="txtCorreo" class="form-control" placeholder="Correo" required>
+                                    <input type="email" name="txtCorreo" id="txtCorreo" class="form-control" placeholder="carlosacarranza@gmail.comn" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="txtDireccion">Dirección</label>
-                                    <input type="text" name="txtDireccion" id="txtDireccion" class="form-control" placeholder="Direccion" required>
+                                    <input type="text" name="txtDireccion" id="txtDireccion" class="form-control" placeholder="Calle 1 # AV. Norte Col. Cruz" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="txtFechaNacimiento">Fecha de Nacimiento</label>
@@ -75,11 +75,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="txtContra">Contraseña</label>
-                                    <input type="password" name="txtContra" id="txtContra" class="form-control" placeholder="Contraseña" required>
+                                    <input type="password" name="txtContra" id="txtContra" class="form-control" placeholder="0Aañ%@/*-$jK" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="txtConfirmarcontra">Confirmar Contraseña</label>
-                                    <input type="password" name="txtConfirmarcontra" id="txtConfirmarcontra" class="form-control" placeholder="Contraseña" required>
+                                    <input type="password" name="txtConfirmarcontra" id="txtConfirmarcontra" class="form-control" placeholder="0Aañ%@/*-$jK" required>
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary btn-block mt-2" id="btnCrear">Crear Cuenta</button>
@@ -98,16 +98,50 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     
     <script>
-        function comprar(libro) {
-            $.post('http://localhost:3000/comprar', JSON.stringify(libro), (res) => {
-                console.log(res);
-            });
-        }
         function iniciar(datos) {
             console.log(datos);
             $.post('http://localhost:3000/iniciar_sesion',JSON.stringify(datos) ,(res) => {
                 console.log(res);
                 if(res.inicio == true) {
+                    window.location.href = 'http://localhost:3000/index';
+                }
+            }, 'json');
+        }
+        function registrar(datos) {
+            console.log(datos);
+            $.post('http://localhost:3000/administrar_usuarios', JSON.stringify(datos), (datos) => {
+                    console.log(datos);
+                    if (datos.respuesta == true) {
+                        html = `<strong>Usuario agregado correctamente</strong>
+                            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                                X
+                            </button>`;
+                        $('#alertaUsuarios').html(html);
+                        $('#alertaUsuarios').removeClass('d-none');
+                        $('#alertaUsuarios').removeClass('alert-danger')
+                            .addClass('alert-success');
+                        setTimeout(() => {
+                            $('#alertaUsuarios').addClass('d-none');
+                        }, 5000);
+                        limpiarUsuaios();
+                        mostrarUsuarios();
+                    } else {
+                        html = `<strong>Error al agregar el usuario</strong>
+                            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                                X
+                            </button>`;
+                        $('#alertaUsuarios').html(html);
+                        $('#alertaUsuarios').removeClass('d-none');
+                        $('#alertaUsuarios').removeClass('alert-success')
+                            .addClass('alert-danger');
+                        setTimeout(() => {
+                            $('#alertaUsuarios').addClass('d-none');
+                        }, 5000);
+                    }
+                }, 'json');
+            $.post('http://localhost:3000/usuario',JSON.stringify(datos) ,(res) => {
+                console.log(res);
+                if(res.registro == true) {
                     window.location.href = 'http://localhost:3000/index';
                 }
             }, 'json');
@@ -120,6 +154,35 @@
                     contra: $('#txtContraEntrar').val()
                 }
                 iniciar(datos);
+            });
+            $('#frmRegistrar').submit(e => {
+                e.preventDefault();
+                let accion = 'insertar',
+                    id = '0',
+                    dui = $('#txtDUI').val(),
+                    nombre = $('#txtNombre').val(),
+                    nick = $('#txtNick').val(),
+                    telefono = $('#txtTelefono').val(),
+                    correo = $('#txtCorreo').val(),
+                    direccion = $('#txtDireccion').val(),
+                    fechaNacimiento = $('#txtFechaNacimiento').val(),
+                    contra = $('#txtContra').val(),
+                    permiso = $('#slcPermisos').val();
+                    datos = {
+                        accion: accion,
+                        id: id,
+                        dui: dui,
+                        nombre: nombre,
+                        nickname: nick,
+                        telefono: telefono,
+                        correo: correo,
+                        direccion: direccion,
+                        fechaNacimiento: fechaNacimiento,
+                        contraseña: contra,
+                        idTipo: permiso
+                    };
+                    console.log(datos);
+                
             });
         });
     </script>

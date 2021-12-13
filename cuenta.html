@@ -21,10 +21,6 @@
                     <a class="nav-link" href="recomendaciones">Recomendaciones</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="tendencias">Tendencias</a>
-                </li>
-                <li class="nav-item">
-                    <!-- Enlace que resalta la página actual -->
                     <a class="nav-link active" href="cuenta">Cuenta</a>
                 </li>
                 <li class="nav-item">
@@ -43,9 +39,6 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <img src="img/perfil.jpg" alt="" class="img-fluid" id="imgProfile">
-                                </div>
                                 <div class="col-md-8">
                                     <h4>Nombre</h4>
                                     <p id="lblNombre"></p>
@@ -60,7 +53,6 @@
                                         <p id="lblCorreo"></p>
                                         <br>
                                     </p>
-                                    <a href="cuenta.html" class="btn btn-light">Editar</a>
                                 </div>
                             </div>
                         </div>
@@ -107,14 +99,14 @@
                 let html = '';
                 for (let i = 0; i < libros.length; i++) {
                     html += `<div class="row">`
-                        for (let j = 0; j < 3; j++) {
-                        if (i * 3 + j < libros.length) {
+                        for (let j = 0; j < 4; j++) {
+                        if (i * 4 + j < libros.length) {
                             html += `<div class="col-md-3">
                             <div class="card text-white bg-dark">
-                                <img src="${libros[i * 3 + j].Imagen}" alt="" height="450" width="300" class="card-img-top">
+                                <img src="${libros[i * 4 + j].Imagen}" alt="" height="450" width="300" class="card-img-top">
                                 <div class="card-body overflow-auto" style="min-height: 200px; max-height:200px;">
-                                    <h5 class="card-title">${libros[i * 3 + j].Titulo}</h5>
-                                    <p class="card-text">${libros[i * 3 + j].Autor}</p>
+                                    <h5 class="card-title">${libros[i * 4 + j].Titulo}</h5>
+                                    <p class="card-text">${libros[i * 4 + j].Autor}</p>
                                     <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" onclick='agregarLibro(${JSON.stringify(libros)})'>Agregar A</button>
                                 </div>
                                 </div>
@@ -139,8 +131,8 @@
             });
         }
         $(document).ready(e => {
-            mostrarPrestados();
             mostrarUsuario();
+            mostrarPrestados();
 
             $('#btnSalir').click(e => {
                 salir();

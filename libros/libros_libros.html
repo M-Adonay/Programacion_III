@@ -44,15 +44,26 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="imgLibro">Imagen</label>
+                    <label for="imgLibro">Portada</label>
                     <input type="file" class="form-control-file" id="imgLibro" name="imgLibro" required>
                     <canvas id="canvasLibro" hidden></canvas>
+                    <div class="col-md-6">
+                        <div for="imgLibro" style="background-image: url(https://i.pinimg.com/736x/7e/23/8d/7e238d1b3dfe91ba8741d3215b7a6165.jpg); width: 300px; height: 450px; background-position: center center; background-size: 200%; padding: 0;">
+                            <img id="imgLibroPreview" class="" src="" alt="" width="" height="">
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="chkActualizarImagenLibro" name="chkActualizarImagenLibro" disabled>
+                        <label class="form-check-label" for="chkActualizarImagenLibro">Actualizar Imagen</label>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="txtCantidadLibro">Cantidad</label>
-                    <input type="number" class="form-control" id="txtCantidadLibro" name="txtCantidadLibro" placeholder="Cantidad">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="txtCantidadLibro">Cantidad</label>
+                            <input type="number" class="form-control" id="txtCantidadLibro" name="txtCantidadLibro" placeholder="Cantidad">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -79,8 +90,8 @@
         }, 'json');
     }
     function actualizarLibro(libro) {
-        $('#frmLibros').attr('data-accion', 'actualizar');
-        $('#frmLibros').attr('data-id', libro.idLibro);
+        $('#frmLibros').data('accion', 'actualizar');
+        $('#frmLibros').data('id', libro.idLibro);
         $('#txtTituloLibro').val(libro.Titulo);
         $('#txtAutorLibro').val(libro.Autor);
         $('#txtEdicionLibro').val(libro.Edicion);
@@ -93,10 +104,13 @@
         }
         $('#imgLibro').val('');
         $('#txtCantidadLibro').val(libro.Cantidad);
+        $('#imgLibro').prop('required', false);
+        $('#imgLibroPreview').attr('src', libro.Imagen);
+        $('#chkActualizarImagenLibro').prop('disabled', false).prop('checked', false);
     }
     function limpiarLibros() {
-        $('#frmLibros').attr('data-accion', 'insertar');
-        $('#frmLibros').attr('data-id', 0);
+        $('#frmLibros').data('accion', 'insertar');
+        $('#frmLibros').data('id', 0);
         $('#txtTituloLibro').val('');
         $('#txtAutorLibro').val('');
         $('#txtEdicionLibro').val('');
@@ -104,22 +118,36 @@
         $('#sltGeneroLibro').val('');
         $('#imgLibro').val('');
         $('#txtCantidadLibro').val('');
+        $('#imgLibro').prop('required', true);
+        $('#imgLibroPreview').attr('src', '').attr('width', '0').attr('height', '0');
+        $('#chkActualizarImagenLibro').prop('disabled', true).prop('checked', false);
     }
     $(document).ready(e => {
         mostrarGeneros();
 
+        $('#chkActualizarImagenLibro').change(e => {
+            if ($('#chkActualizarImagenLibro').is(':checked')) {
+                $('#imgLibro').prop('required', true);
+            } else {
+                $('#imgLibro').prop('required', false);
+            }
+        });
+
         $('#imgLibro').change(e => {
+            $('#btnInsertarLibro').prop('disabled', true);
             let img = new Image();
             let file = e.target.files[0];
             let reader = new FileReader();
             reader.onload = function(e) {
                 img.src = e.target.result;
+                $('#imgLibroPreview').attr('src', e.target.result).width(300).height(450);
                 img.onload = function() {
                     let canvas = document.getElementById('canvasLibro');
                     let ctx = canvas.getContext('2d');
                     canvas.width = 300;
-                    canvas.height = 300;
+                    canvas.height = 450;
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    $('#btnInsertarLibro').prop('disabled', false);
                 }
             }
             reader.readAsDataURL(file);
@@ -130,15 +158,14 @@
             let ctx = canvas.getContext('2d');
             console.log(canvas, canvas.width, canvas.height);
             let imagen = [];
-            for(i=0; i<canvas.width; i++){
-                for(j=0; j< canvas.height; j++){
+            for(i=0; i<canvas.height; i++){
+                for(j=0; j< canvas.width; j++){
                     let imgdata = ctx.getImageData(j,i,1,1).data,
-                        r = imgdata[0],
-                        g = imgdata[1],
-                        b = imgdata[2];
-                    imagen.push([r,g,b]);
+                        pixel = imgdata[0] + ',' + imgdata[1] + ',' + imgdata[2];
+                    imagen.push(pixel);
                 }
             }
+            imagen = imagen.join(',');
             let accion = $('#frmLibros').data('accion'),
                 id = $('#frmLibros').data('id'),
                 titulo = $('#txtTituloLibro').val(),
@@ -147,6 +174,9 @@
                 sinopsis = $('#txtSinopsisLibro').val(),
                 genero = $('#sltGeneroLibro').val(),
                 cantidad = $('#txtCantidadLibro').val(),
+                nuevaimagen = $('#chkActualizarImagenLibro').is(':checked'),
+                alto = canvas.height,
+                ancho = canvas.width,
                 datos = {
                     accion: accion,
                     id: id,
@@ -156,13 +186,16 @@
                     sinopsis: sinopsis,
                     generos: genero,
                     cantidad: cantidad,
-                    imagen: imagen
+                    imagen: imagen,
+                    nuevaimagen: nuevaimagen,
+                    alto: alto,
+                    ancho: ancho
                 };
             console.log(datos);
             $.post('http://localhost:3000/administrar_libro', JSON.stringify(datos), (libro) => {
                 console.log(libro);
                 
-                if (libro.respuesta == true) {
+                if (libro.respuesta[0] == true) {
                     html = `<strong>Usuario agregado correctamente</strong>
                         <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
                             X

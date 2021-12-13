@@ -1,0 +1,9 @@
+books
+---bookId
+---title
+---genres
+
+ratings
+---userId
+---bookId
+---rating

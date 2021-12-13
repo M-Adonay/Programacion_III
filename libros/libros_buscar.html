@@ -52,7 +52,7 @@
                         <td>${libro.Edicion}</td>
                         <td>${libro.Sinopsis}</td>
                         <td>${etiquetas}</td>
-                        <td><img src="${libro.Imagen}" width="100" height="100"></td>
+                        <td><img src="${libro.Imagen}" alt="${libro.Titulo}" class="img-thumbnail" style="width: 100px;"></td>
                         <td>${libro.Cantidad}</td>
                         <td  class="table-secondary">
                             <button class="btn btn-danger" onclick='eliminarLibro(${JSON.stringify(libro)})''>Eliminar</button>
@@ -67,7 +67,8 @@
         if( confirm(`Esta seguro de eliminar el libro ${libro.Titulo}?`) ){
             let accion = "eliminar",
                 id = libro.idLibro,
-                datos = {accion,id};
+                nuevaimagen = false,
+                datos = {accion,id, nuevaimagen};
             console.log(datos);
             $.post("http://localhost:3000/administrar_libro",JSON.stringify(datos),(resp, status)=>{
                 console.log(resp);

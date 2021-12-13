@@ -21,9 +21,6 @@
                     <a class="nav-link active" href="recomendaciones">Recomendaciones</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="tendencias">Tendencias</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="cuenta">Cuenta</a>
                 </li>
                 <li class="nav-item">
@@ -91,6 +88,16 @@
             });
         }
         function mostrarRecomendaciones() {
+            $.get('http://localhost:3000/mostrar_rating', (res) => {
+                console.log('RATINGS',res);
+                
+            }, 'json');
+             $.get('http://localhost:3000/mostrar_libros', (libros) => {
+                console.log('LIBROS',libros);
+             }, 'json');
+             $.get('http://localhost:3000/recomendar', (libros) => {
+                console.log('LIBROS',libros);
+             }, 'json');
             // $.get('http://localhost:3000/mostrar_recomendaciones', (libros) => {
             //     libros = libros.resultado;
             //     console.log(libros);
@@ -117,7 +124,7 @@
             // }, 'json')
         }
         $(document).ready(e => {
-            mostrarLibros();
+            // mostrarLibros();
             mostrarRecomendaciones();
 
             $('#btnSalir').click(e => {
